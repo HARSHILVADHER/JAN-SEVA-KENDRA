@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aadhar Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('../Images/Background.jpg');
+      background-size: cover;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    nav .logo-section .title {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin-left: 10px;
+    }
+
+    nav .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 10px 20px;
+      margin-left: 10px;
+      transition: all 0.3s ease;
+    }
+
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .content-box {
+      background-color: white;
+      width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .content-box h2 {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .content-box ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    .send-section {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .send-section input {
+      padding: 10px;
+      width: 60%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .button-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .send-section button {
+      padding: 10px 20px;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .send-section button:hover {
+      background-color: #1ebe5d;
+    }
+
+    .translate-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .translate-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo-section">
+      <img src="../Images/logo.png" alt="Logo" style="height: 60px; width: 60px;" />
+      <span class="title">Jan Seva Kendra</span>
+    </div>
+    <div class="nav-links">
+      <a href="../Home.php">HOME</a>
+      <a href="../Document.html">DOCUMENT</a>
+    </div>
+  </nav>
+
+  <!-- Content Box -->
+  <div class="content-box">
+    <h2>AADHAR DOCUMENT</h2>
+    <ul id="document-list">
+      <li><input type="checkbox" value="Passport"> Passport</li>
+      <li><input type="checkbox" value="PAN Card"> PAN Card</li>
+      <li><input type="checkbox" value="Voter ID Card"> Voter ID Card</li>
+      <li><input type="checkbox" value="Driving License"> Driving License</li>
+    </ul>
+    <button class="translate-btn" onclick="translateToGujarati()">Translate to Gujarati</button>
+    <div class="send-section">
+      <input type="text" id="phoneNumber" placeholder="Enter WhatsApp number with country code (e.g. 919876543210)">
+      <div class="button-group">
+        <button onclick="sendToWhatsApp()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getSelectedDocuments() {
+      const checkboxes = document.querySelectorAll("#document-list input:checked");
+      let message = "*📄 Selected AADHAR DOCUMENTS:*";
+      checkboxes.forEach((checkbox) => {
+        message += `• ${checkbox.value}
+`;
+      });
+      return message;
+    }
+
+    function sendToWhatsApp() {
+      const phone = document.getElementById("phoneNumber").value.trim();
+      if (!/^\d{10,15}$/.test(phone)) {
+        alert("Please enter a valid phone number with country code");
+        return;
+      }
+      const encodedMessage = encodeURIComponent(getSelectedDocuments());
+      const finalURL = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedMessage}`;
+      window.open(finalURL, "_blank");
+    }
+
+    function translateToGujarati() {
+      const gujaratiTranslations = {
+        "Passport": "પાસપોર્ટ",
+        "PAN Card": "પાન કાર્ડ",
+        "Voter ID Card": "મતદાર ઓળખ કાર્ડ",
+        "Driving License": "ડ્રાઈવિંગ લાઈસન્સ"
+      };
+      
+      document.querySelectorAll("#document-list li").forEach((li) => {
+        const checkbox = li.querySelector("input");
+        if (checkbox) {
+          checkbox.value = gujaratiTranslations[checkbox.value] || checkbox.value;
+          li.innerHTML = `<input type='checkbox' value='${checkbox.value}'> ${checkbox.value}`;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
